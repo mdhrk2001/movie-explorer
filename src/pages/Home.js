@@ -60,7 +60,7 @@ const Home = () => {
         results = res.data.results;
       }
 
-      // Apply filters (if any)
+      // Apply filters(if any)
       if (filters) {
         if (filters.genre) {
           results = results.filter(m => m.genre_ids.includes(Number(filters.genre)));
