@@ -37,6 +37,12 @@ export const MovieProvider = ({ children }) => {
     }
   }, [user]);
 
+  // Sync body theme class for global scrollbars & background overrides
+  useEffect(() => {
+    document.body.classList.remove('theme-light', 'theme-dark');
+    document.body.classList.add(`theme-${themeMode}`);
+  }, [themeMode]);
+
   const addFavorite = (movie) => {
     if (!favorites.find(fav => fav.id === movie.id)) {
       setFavorites([...favorites, movie]);

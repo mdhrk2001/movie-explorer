@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import {
-  Container, TextField, Button, Typography, Card, CardContent, Box
+  Container, TextField, Button, Typography, Card, CardContent, Box, Stack, InputAdornment
 } from '@mui/material';
 import { MovieContext } from '../context/MovieContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +8,11 @@ import { motion } from 'framer-motion';
 import PageWrapper from '../components/PageWrapper';
 import ResponsiveNavbar from '../components/ResponsiveNavbar';
 import { useSnackbar } from 'notistack';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useTheme } from '@mui/material/styles';
 
-const MotionCard = motion(Card);
+const MotionCard = motion.create(Card);
 
 const LoginPage = () => {
   const { login } = useContext(MovieContext);
@@ -17,7 +20,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const navigate = useNavigate();
-
+  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleUsernameChange = (e) => {
@@ -44,7 +47,7 @@ const LoginPage = () => {
 
     const success = login(username, password);
     if (success) {
-      enqueueSnackbar('Login successful!', { variant: 'success' });
+      enqueueSnackbar('Welcome back to Movie Explorer!', { variant: 'success' });
       navigate('/');
     } else {
       enqueueSnackbar('Invalid credentials!', { variant: 'error' });
@@ -57,52 +60,153 @@ const LoginPage = () => {
     <PageWrapper>
       <ResponsiveNavbar />
 
-      <Container sx={{ mt: { xs: 4, md: 6 }, mb: 4 }} maxWidth="sm">
-        <MotionCard
-          whileHover={{ scale: 1.02 }}
-          sx={{ padding: 3, borderRadius: 3, boxShadow: 4 }}
-        >
-          <CardContent>
-            <Typography variant="h5" align="center" sx={{ mb: 3, fontWeight: 'bold' }}>
-              Login to Movie Explorer
-            </Typography>
+      <Box 
+        sx={{ 
+          position: 'relative', 
+          minHeight: '80vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          overflow: 'hidden',
+          py: 4
+        }}
+      >
+        {/* Cinematic Glowing Background Orbs */}
+        <Box 
+          sx={{
+            position: 'absolute',
+            width: 300,
+            height: 300,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)',
+            top: '15%',
+            left: '20%',
+            zIndex: -1,
+            filter: 'blur(40px)',
+          }}
+        />
+        <Box 
+          sx={{
+            position: 'absolute',
+            width: 350,
+            height: 350,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)',
+            bottom: '15%',
+            right: '15%',
+            zIndex: -1,
+            filter: 'blur(50px)',
+          }}
+        />
 
-            <form onSubmit={handleLogin}>
-              <TextField
-                label="Username"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                value={username}
-                onChange={handleUsernameChange}
-                error={!!usernameError}
-                helperText={usernameError}
-              />
+        <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
+          <MotionCard
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            whileHover={{ y: -4 }}
+            sx={{ 
+              padding: { xs: 2, sm: 4 }, 
+              borderRadius: 6, 
+              backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.45)' : 'rgba(17, 24, 39, 0.45)',
+              backdropFilter: 'blur(20px)',
+              border: `1px solid ${theme.palette.mode === 'light' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.05)'}`,
+              boxShadow: theme.palette.mode === 'light' 
+                ? '0 20px 40px -15px rgba(0,0,0,0.08)' 
+                : '0 25px 50px -20px rgba(0,0,0,0.8)',
+            }}
+          >
+            <CardContent>
+              <Typography 
+                variant="h4" 
+                align="center" 
+                sx={{ 
+                  mb: 1.5, 
+                  fontWeight: 800,
+                  background: 'linear-gradient(45deg, #EC4899, #8B5CF6)', 
+                  WebkitBackgroundClip: 'text', 
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Welcome Back
+              </Typography>
+              <Typography 
+                variant="body2" 
+                align="center" 
+                color="text.secondary" 
+                sx={{ mb: 4, fontWeight: 500 }}
+              >
+                Log in to sync your curated favorite movies.
+              </Typography>
 
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <form onSubmit={handleLogin}>
+                <Stack spacing={3}>
+                  <TextField
+                    label="Username"
+                    variant="outlined"
+                    fullWidth
+                    value={username}
+                    onChange={handleUsernameChange}
+                    error={!!usernameError}
+                    helperText={usernameError}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonOutlineIcon color="primary" sx={{ opacity: 0.7 }} />
+                          </InputAdornment>
+                        ),
+                      }
+                    }}
+                  />
 
-              <Box sx={{ textAlign: 'center', mt: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  disabled={isFormInvalid}
-                >
-                  Login
-                </Button>
-              </Box>
-            </form>
-          </CardContent>
-        </MotionCard>
-      </Container>
+                  <TextField
+                    label="Password"
+                    type="password"
+                    variant="outlined"
+                    fullWidth
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockOutlinedIcon color="primary" sx={{ opacity: 0.7 }} />
+                          </InputAdornment>
+                        ),
+                      }
+                    }}
+                  />
+
+                  <Box sx={{ textAlign: 'center', mt: 2 }}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="large"
+                      disabled={isFormInvalid}
+                      sx={{
+                        width: '100%',
+                        py: 1.6,
+                        fontSize: '1rem',
+                        borderRadius: 3.5,
+                        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                        '&:hover': {
+                          background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.secondary.light} 100%)`,
+                          boxShadow: theme.palette.mode === 'light'
+                            ? '0 10px 25px rgba(99, 102, 241, 0.3)'
+                            : '0 10px 25px rgba(139, 92, 246, 0.4)'
+                        }
+                      }}
+                    >
+                      Enter The Explorer
+                    </Button>
+                  </Box>
+                </Stack>
+              </form>
+            </CardContent>
+          </MotionCard>
+        </Container>
+      </Box>
     </PageWrapper>
   );
 };
