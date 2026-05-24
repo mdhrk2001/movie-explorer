@@ -2,7 +2,8 @@ import { useState, useContext } from 'react';
 import {
   AppBar, Toolbar, IconButton, Typography, Box, Drawer,
   List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Divider, useMediaQuery, Button, Badge
+  Divider, useMediaQuery, Button, Badge,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -21,6 +22,7 @@ const MotionDrawer = motion.create(Box);
 
 const ResponsiveNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { favorites, user, logout } = useContext(MovieContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -31,8 +33,17 @@ const ResponsiveNavbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const handleLogout = () => {
+  const handleOpenLogoutDialog = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const handleCloseLogoutDialog = () => {
+    setLogoutDialogOpen(false);
+  };
+
+  const handleConfirmLogout = () => {
     logout();
+    setLogoutDialogOpen(false);
     enqueueSnackbar('Logged out successfully!', { variant: 'info' });
   };
 
@@ -114,7 +125,7 @@ const ResponsiveNavbar = () => {
         {user ? (
           <ListItem disablePadding>
             <ListItemButton 
-              onClick={handleLogout}
+              onClick={handleOpenLogoutDialog}
               sx={{ 
                 borderRadius: 3,
                 color: theme.palette.error.main,
@@ -273,7 +284,7 @@ const ResponsiveNavbar = () => {
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={handleLogout}
+                  onClick={handleOpenLogoutDialog}
                   sx={{ 
                     px: 3, 
                     borderRadius: 8, 
@@ -314,6 +325,42 @@ const ResponsiveNavbar = () => {
           {drawerOpen && drawerContent}
         </AnimatePresence>
       </Drawer>
+
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={handleCloseLogoutDialog}
+        aria-labelledby="logout-dialog-title"
+        aria-describedby="logout-dialog-description"
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            p: 1.5,
+            backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(17, 24, 39, 0.9)',
+            backdropFilter: 'blur(20px)',
+            border: `1px solid ${theme.palette.mode === 'light' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)'}`,
+            boxShadow: theme.palette.mode === 'light' 
+              ? '0 20px 40px -15px rgba(0,0,0,0.1)' 
+              : '0 25px 50px -20px rgba(0,0,0,0.8)',
+          }
+        }}
+      >
+        <DialogTitle id="logout-dialog-title" sx={{ fontWeight: 800, pb: 1, fontFamily: "'Syne', sans-serif" }}>
+          Confirm Logout
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="logout-dialog-description" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
+            Are you sure you want to log out of MovieExplorer? Your favorites will remain saved locally on this device.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+          <Button onClick={handleCloseLogoutDialog} variant="outlined" sx={{ px: 3 }}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmLogout} variant="contained" color="error" sx={{ px: 3 }}>
+            Log Out
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
