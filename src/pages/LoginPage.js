@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageWrapper from '../components/PageWrapper';
 import ResponsiveNavbar from '../components/ResponsiveNavbar';
+import Footer from '../components/Footer';
 import { useSnackbar } from 'notistack';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -207,6 +208,7 @@ const LoginPage = () => {
           </MotionCard>
         </Container>
       </Box>
+      <Footer />
     </PageWrapper>
   );
 };

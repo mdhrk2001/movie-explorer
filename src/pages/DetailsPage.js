@@ -7,6 +7,7 @@ import { getMovieDetails } from '../api/tmdb';
 import { motion } from 'framer-motion';
 import PageWrapper from '../components/PageWrapper';
 import ResponsiveNavbar from '../components/ResponsiveNavbar';
+import Footer from '../components/Footer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import StarIcon from '@mui/icons-material/Star';
@@ -327,6 +328,7 @@ const DetailsPage = () => {
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </PageWrapper>
   );
 };

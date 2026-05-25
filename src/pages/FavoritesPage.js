@@ -4,6 +4,7 @@ import { MovieContext } from '../context/MovieContext';
 import MovieCard from '../components/MovieCard';
 import PageWrapper from '../components/PageWrapper';
 import ResponsiveNavbar from '../components/ResponsiveNavbar';
+import Footer from '../components/Footer';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExploreIcon from '@mui/icons-material/Explore';
 import { Link } from 'react-router-dom';
@@ -75,6 +76,7 @@ const FavoritesPage = () => {
           </Box>
         )}
       </Container>
+      <Footer />
     </PageWrapper>
   );
 };

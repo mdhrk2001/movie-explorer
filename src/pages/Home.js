@@ -9,6 +9,7 @@ import FilterControls from '../components/FilterControls';
 import { searchMovies, fetchTrendingMovies } from '../api/tmdb';
 import MovieCard from '../components/MovieCard';
 import ResponsiveNavbar from '../components/ResponsiveNavbar';
+import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
 import { useTheme } from '@mui/material/styles';
 
@@ -247,6 +248,7 @@ const Home = () => {
           </Box>
         )}
       </Container>
+      <Footer />
     </PageWrapper>
   );
 };
